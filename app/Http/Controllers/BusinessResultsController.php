@@ -16,9 +16,15 @@ class BusinessResultsController extends Controller
         
         $locu_url = 'https://api.locu.com/v1_0/venue/search/?locality=' . rawurlencode($data->location->city) . '&region=' . rawurlencode($data->location->state_code) . '&postal_code=' . rawurlencode($data->location->postal_code) .'&street_address=' . rawurlencode(implode(' ', $data->location->address)) . '&api_key=c141c64e3e6fe7d1d68cfee37d0fde3774f99d2f';
         $locu_data = json_decode(file_get_contents($locu_url));
-        $locu_id = $locu_data->objects[0]->id;
-        $menu_url = 'https://widget.locu.com/menuwidget/locu.widget.developer.v2.0.js?venue-id=' . $locu_id . '&script-id=-locu-widget&widget-key=913bdbb9bcf5dd628dfe86716c86fe7c721cc4f6';
-        
+        if (count($locu_data->objects) > 0)
+        {
+            $locu_id = $locu_data->objects[0]->id;
+            $menu_url = 'https://widget.locu.com/menuwidget/locu.widget.developer.v2.0.js?venue-id=' . $locu_id . '&script-id=-locu-widget&widget-key=913bdbb9bcf5dd628dfe86716c86fe7c721cc4f6';
+        }
+        else
+        {
+            $menu_url = 'https://widget.locu.com/menuwidget/locu.widget.developer.v2.0.js?venue-id=&script-id=-locu-widget&widget-key=913bdbb9bcf5dd628dfe86716c86fe7c721cc4f6';
+        }
         $uber_data = $this->getUberData($data);
         
         //$instagram = file_get_contents('https://api.instagram.com/v1/locations/search?lat=34.090488&lng=-118.367165&access_token=18d3e66a27794277be584c98feaa8b8c');

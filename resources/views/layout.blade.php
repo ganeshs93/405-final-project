@@ -8,8 +8,8 @@
     
     <!-- Bootstrap and JQuery -->
     <link rel="stylesheet"  href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 	<!-- Fonts and FontAwesome -->
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
@@ -31,7 +31,7 @@
     @yield('content')
     
     <!-- Speeds up Bootstrap Loading -->
-    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 </body>
 </html>
