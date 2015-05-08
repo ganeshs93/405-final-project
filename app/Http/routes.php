@@ -27,6 +27,8 @@ Route::get('/results', 'YelpResultsController@displaySearchResults');
 
 Route::get('/business/{business_id}', 'BusinessResultsController@displayBusinessDetails');
 
+Route::post('/username-suggestion/{business_id}', 'BusinessResultsController@addUsernameSuggestion');
+
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',

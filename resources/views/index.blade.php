@@ -7,6 +7,13 @@
 @section ('content')
 @include ('navbar')
 <div class="container">
+    @if ($currentUser)
+        @if ($currentUser->access_level == 0)
+            <p class="text-success">You're Logged In! How about searching for something in a city (city is required but what you look for is optional)</p>
+        @elseif ($currentUser->access_level == 1)
+            Admin Stuff
+        @endif
+    @else
     <div class="row">
         <div class="col-md-6 col-sm-6">
         
@@ -92,5 +99,6 @@
             </form>
         </div>
     </div>
+    @endif
 </div>
 @stop

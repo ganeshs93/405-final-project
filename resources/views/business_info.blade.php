@@ -12,6 +12,26 @@
 @include ('navbar')
 @if ($business)
 <div class="container" style="padding-top:15px">
+    @if (count($errors) > 0)
+        <div class = "alert alert-danger alert-dismissable">
+            <a class="panel-close close" data-dismiss="alert">×</a> 
+            @foreach ($errors->all() as $error)
+                <div class="flash">{{ $error }}</div>
+            @endforeach
+        </div>
+    @endif
+    @if ($success_message)
+        <div class = "alert alert-success alert-dismissable">
+            <a class="panel-close close" data-dismiss="alert">×</a> 
+            <div class="flash">{{ $success_message }}</div>
+        </div> 
+    @endif
+    @if ($error_message)
+        <div class = "alert alert-danger alert-dismissable">
+            <a class="panel-close close" data-dismiss="alert">×</a> 
+            <div class="flash">{{ $error_message }}</div>
+        </div>
+    @endif
     <div class="row" style="padding-bottom:15px">
         <img class="pull-right" src="{{ asset('Powered_By_Yelp_Red.png') }}">
     </div>
@@ -48,14 +68,13 @@
             @if (count($business->categories) == 0)
                 <p class="pull-left" style="display:inline">None</p>
             @endif
-            @if ($currentUser)
-                <a href="/business/{{ $business->id }}"><button class="btn btn-info pull-right">More Info</button></a>
-            @else
-                <button class="btn btn-info pull-right" disabled="disabled">More Info</button>
-                <br>
-                <br>
-                <p class="pull-right"><small><a href="/login">Login</a> or <a href="/">Sign Up</a> to Access</small></p>
-            @endif
+            {{-- @if ($currentUser) --}}
+            {{--    <a href="/business/{{ $business->id }}"><button class="btn btn-info pull-right">More Info</button></a> --}}
+            {{-- @else --}}
+            {{--    <button class="btn btn-info pull-right" disabled="disabled">More Info</button> --}}
+            {{--    <br><br> --}}
+            {{--    <p class="pull-right"><small><a href="/login">Login</a> or <a href="/">Sign Up</a> to Access</small></p> --}}
+            {{-- @endif --}}
         </div>
     </div>
 </div>
@@ -71,7 +90,7 @@
     <li role="presentation"><a href="#photo" role="tab" data-toggle="tab"><i class="fa fa-camera-retro fa-lg"></i>&nbsp;&nbsp;Photos</a></li>
 </ul>
 <div class="tab-content">
-    @if(property_exists($business, 'deals') or property_exists($business, 'gift_cards'))
+    @if (property_exists($business, 'deals') or property_exists($business, 'gift_cards'))
     <div role="tabpanel" class="tab-pane fade in active" id="deals">
         <div class="container">
             @if(property_exists($business, 'deals'))
@@ -186,7 +205,99 @@
     </div>
     <div role="tabpanel" class="tab-pane fade" id="photo">
         <div class="container">
-        
+            @if ($currentUser)
+            <form class="form-inline" style="padding-top:15px" method="post" action="/username-suggestion/{{ $business->id }}">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <div class="form-group">
+                    <label for="username"><strong>Restaurant's Instagram Username:&nbsp;</strong></label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Suggest username" name="username" id="username">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="submit">Suggest</button>
+                        </span>
+                    </div>
+                </div>
+            </form>
+            <br><br>
+            @else
+            <form class="form-inline" style="padding-top:15px">
+                <div class="form-group">
+                    <label for="username_dud"><strong>Restaurant's Instagram Username:&nbsp;</strong></label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Suggest username" id="username_dud">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" disabled="disabled">Suggest</button>
+                        </span>
+                    </div>
+                </div>
+            </form>
+            <br><br>
+            <p class=""><small><a href="/login">Login</a> or <a href="/">Sign Up</a> to Access</small></p>
+            <br>
+            @endif
+            @if ($instagram_user)
+            <div id="user_carousel" class="carousel slide" data-ride="carousel" data-interval="false" data-wrap="false">
+                <div class="carousel-inner" role="listbox">
+                    <div class="item active">
+                        <img src="http://www.techspot.com/images2/downloads/topdownload/Instagram.png" class="center-block">
+                        <div class="carousel-caption">
+                            <h3>Photos By Restaurant Owners</h3>
+                        </div>
+                    </div>
+                    @foreach ($instagram_user->data as $data)
+                        @if ($data->type == 'image')
+                            <div class="item">
+                            <img src="{{ $data->images->standard_resolution->url }}" class="center-block">
+                            <div class="carousel-caption">
+                                <h3><a target="_blank">{{ $data->link }}</a></h3>
+                                <p>{{ $data->caption->text }}</p>
+                            </div>
+                        </div>
+                        @endif
+                    @endforeach
+                </div>
+                <a class="left carousel-control" href="#user_carousel" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                </a>
+                <a class="right carousel-control" href="#user_carousel" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                </a>
+            </div>
+            <br>
+            @endif
+            @if ($instagram_location)
+            <div id="location_carousel" class="carousel slide" data-ride="carousel" data-interval="false" data-wrap="false">
+                <div class="carousel-inner" role="listbox">
+                    <div class="item active">
+                        <img src="http://www.techspot.com/images2/downloads/topdownload/Instagram.png" class="center-block">
+                        <div class="carousel-caption">
+                            <h3>Photos Taken at this Location</h3>
+                        </div>
+                    </div>
+                    @foreach ($instagram_location as $location)
+                        @foreach ($location->data as $data)
+                            @if ($data->type == 'image')
+                            <div class="item">
+                                <img src="{{ $data->images->standard_resolution->url }}" class="center-block">
+                                <div class="carousel-caption">
+                                    <h3><a target="_blank">{{ $data->link }}</a></h3>
+                                    @if ($data->caption)
+                                        <p>{{ $data->caption->text }}</p>
+                                    @endif
+                                </div>
+                            </div>
+                            @endif
+                        @endforeach
+                    @endforeach
+                </div>
+                <a class="left carousel-control" href="#location_carousel" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                </a>
+                <a class="right carousel-control" href="#location_carousel" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                </a>
+            </div>
+            @endif
         </div>
     </div>
 </div>

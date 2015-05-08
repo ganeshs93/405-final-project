@@ -5,7 +5,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
       </button>
-        <a class="navbar-brand" href="#">There and Back</a>
+        <a class="navbar-brand" href="/">There and Back</a>
     </div>
     <div class="navbar-collapse collapse">
         @if ($currentUser)
