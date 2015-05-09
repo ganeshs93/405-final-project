@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Services\OAuthToken;
+use Illuminate\Support\Facades\Cache;
 use Config;
 
 require_once('OAuth.php');
@@ -38,15 +39,25 @@ class InstagramAPI
     
     public function getJSON($url)
     {
-        if ($this->getHTTPResponseCode($url) == '200')
+        if (Cache::has($url))
         {
-            $json_string = file_get_contents($url);
+            $json_string = Cache::get($url);
             $data = json_decode($json_string);
             return $data;
         }
         else
         {
-            return null;
-        }    
+            if ($this->getHTTPResponseCode($url) == '200')
+            {
+                $json_string = file_get_contents($url);
+                Cache::put($url, $json_string, 30);
+                $data = json_decode($json_string);
+                return $data;
+            }
+            else
+            {
+                return null;
+            }  
+        }
     }
 }

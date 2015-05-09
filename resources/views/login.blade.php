@@ -12,6 +12,12 @@
         <div class="text-center">
             <h1>Login</h1>
         </div>
+        @if ($success_message)
+            <div class = "alert alert-success alert-dismissable">
+                <a class="panel-close close" data-dismiss="alert">×</a> 
+                <div class="flash">{{ $success_message }}</div>
+            </div> 
+        @endif
         @if ($error_message)
             <div class = "alert alert-danger alert-dismissable col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2">
                 <a class="panel-close close" data-dismiss="alert">×</a> 

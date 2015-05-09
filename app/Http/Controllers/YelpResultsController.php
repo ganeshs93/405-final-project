@@ -6,28 +6,37 @@ use Illuminate\Http\Request;
 use App\Services\YelpAPI;
 use Auth;
 use Config;
+use Session;
 
 class YelpResultsController extends Controller
 {
     public function displaySearchResults(Request $request)
     {
-        $data = $this->getYelpDataFromSearchTerms($request->term, $request->location, $request->category_filter, $request->deals_filter, $request->offset);
-        if ($data)
+        $success_message = Session::get('success_message');
+        $error_message = Session::get('error_message');
+        if($request->location)
         {
-            $businesses = $data->businesses;
+            $data = $this->getYelpDataFromSearchTerms($request->term, $request->location, $request->category_filter, $request->deals_filter, $request->offset);
+            if ($data)
+            {
+                $businesses = $data->businesses;
+            }
+            else
+            {
+                $businesses = null;
+            }
+            $user_logged_in = Auth::user();
+            $deals_toggled = $this->getDealsToggledURLAndLinkTitle($request->term, $request->location, $request->category_filter, $request->deals_filter, $request->offset);
+            return view('search_results', [
+                'businesses' => $businesses,
+                'currentUser' => $user_logged_in,
+                'urlIfDealsToggled' => $deals_toggled[0],
+                'linkTitleIfDealsToggled' => $deals_toggled[1],
+                'success_message' => $success_message,
+                'error_message' => $error_message
+            ]);
         }
-        else
-        {
-            $businesses = null;
-        }
-        $user_logged_in = Auth::user();
-        $deals_toggled = $this->getDealsToggledURLAndLinkTitle($request->term, $request->location, $request->category_filter, $request->deals_filter, $request->offset);
-        return view('search_results', [
-            'businesses' => $businesses,
-            'currentUser' => $user_logged_in,
-            'urlIfDealsToggled' => $deals_toggled[0],
-            'linkTitleIfDealsToggled' => $deals_toggled[1]
-        ]);
+        return redirect()->back()->with('error_message', 'Location is required');
     }
     
     public function getYelpDataFromSearchTerms($term, $location, $category, $deals, $offset)

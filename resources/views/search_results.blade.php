@@ -8,6 +8,18 @@
 @include ('navbar')
 
 <div class="container" style="padding-top:15px">
+    @if ($success_message)
+        <div class = "alert alert-success alert-dismissable">
+            <a class="panel-close close" data-dismiss="alert">×</a> 
+            <div class="flash">{{ $success_message }}</div>
+        </div> 
+    @endif
+    @if ($error_message)
+        <div class = "alert alert-danger alert-dismissable">
+            <a class="panel-close close" data-dismiss="alert">×</a> 
+            <div class="flash">{{ $error_message }}</div>
+        </div>
+    @endif
     <div class="row" style="padding-bottom:15px">
         <a class="pull-left" href="{{ $urlIfDealsToggled }}">{{ $linkTitleIfDealsToggled }}</a>
         <img class="pull-right" src="{{ asset('Powered_By_Yelp_Red.png') }}">

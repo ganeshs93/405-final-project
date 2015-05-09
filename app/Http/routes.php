@@ -27,6 +27,10 @@ Route::get('/results', 'YelpResultsController@displaySearchResults');
 
 Route::get('/business/{business_id}', 'BusinessResultsController@displayBusinessDetails');
 
+Route::get('/remove-suggestion/{business_id}/{instagram_username}', 'UserController@removeSuggestion');
+
+Route::get('/add-suggestion/{business_id}/{instagram_username}', 'UserController@addSuggestion');
+
 Route::post('/username-suggestion/{business_id}', 'BusinessResultsController@addUsernameSuggestion');
 
 Route::controllers([
