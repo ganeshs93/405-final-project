@@ -3,3 +3,6 @@
 Final Project for ITP 405
 
 Screencast URL: https://www.screenr.com/vEQN
+
+Website URL: https://itp405.herokuapp.com/
+(Note: make sure to load unsafe scripts otherwise bootstrap may not work)
