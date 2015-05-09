@@ -7,22 +7,22 @@
 @section ('content')
 @include ('navbar')
 <div class="container">
+    @if ($success_message)
+        <div class = "alert alert-success alert-dismissable">
+            <a class="panel-close close" data-dismiss="alert">×</a> 
+            <div class="flash">{{ $success_message }}</div>
+        </div> 
+    @endif
+    @if ($error_message)
+        <div class = "alert alert-danger alert-dismissable">
+            <a class="panel-close close" data-dismiss="alert">×</a> 
+            <div class="flash">{{ $error_message }}</div>
+        </div>
+    @endif
     @if ($currentUser)
         @if ($currentUser->access_level == 0)
             <p class="text-success">You're Logged In! How about searching for something in a city (city is required but what you look for is optional)</p>
         @elseif ($currentUser->access_level == 1)
-            @if ($success_message)
-                <div class = "alert alert-success alert-dismissable">
-                    <a class="panel-close close" data-dismiss="alert">×</a> 
-                    <div class="flash">{{ $success_message }}</div>
-                </div> 
-            @endif
-            @if ($error_message)
-                <div class = "alert alert-danger alert-dismissable">
-                    <a class="panel-close close" data-dismiss="alert">×</a> 
-                    <div class="flash">{{ $error_message }}</div>
-                </div>
-            @endif
             @if ($suggestions and count($suggestions) > 0)
             <table class="table table-stripe table-hover table-condensed">
                 <thead>
